@@ -2,9 +2,9 @@ const ENTER = 13;
 const DOWN_ARROW = 40;
 const UP_ARROW = 38;
 
-class CommandPaletteRenderer {
-	constructor(commandPalette) {
-		this.commandPalette = commandPalette;
+class DialogRenderer {
+	constructor(dialog) {
+		this.dialog = dialog;
 		this.selectedSuggestionIndex = 0;
 
 		// Create a backdrop element
@@ -35,7 +35,7 @@ class CommandPaletteRenderer {
 
 	onKeyDown(e) {
 		if (e.keyCode === ENTER) {
-			this.commandPalette.invokeCommand(this.selectedSuggestionIndex);
+			this.dialog.selectItem(this.selectedSuggestionIndex);
 		} else if (e.keyCode === UP_ARROW) {
 			this.selectedSuggestionIndex = Math.max(this.selectedSuggestionIndex - 1, 0);
 			this.render();
@@ -44,20 +44,20 @@ class CommandPaletteRenderer {
 		} else if (e.keyCode === DOWN_ARROW) {
 			this.selectedSuggestionIndex = Math.min(
 				this.selectedSuggestionIndex + 1,
-				this.commandPalette.currentSuggestions.length - 1
+				this.dialog.currentSuggestions.length - 1
 			);
 			e.preventDefault();
 			this.render();
 			return false;
 		} else {
 			this.selectedSuggestionIndex = 0;
-			this.commandPalette.updateSuggestions(e.target.value);
+			this.dialog.filter(e.target.value);
 		}
 	}
 
 	render() {
 		// Adjust visibility
-		if (this.commandPalette.visible) {
+		if (this.dialog.visible) {
 			this.container.classList.add('show');
 			this.backdrop.classList.add('show');
 			this.textInput.focus();
@@ -70,13 +70,13 @@ class CommandPaletteRenderer {
 
 		// Render suggestion list
 		const suggestionFragment = document.createDocumentFragment();
-		const suggestions = this.commandPalette.currentSuggestions;
+		const suggestions = this.dialog.currentSuggestions;
 		suggestions.forEach((suggestion, i) => {
 			var item = document.createElement('div');
 			item.innerHTML = '<div>' + suggestion.name + '</div>';
 			let index = i;
 			item.addEventListener('click', () => {
-				this.commandPalette.invokeCommand(i);
+				this.dialog.selectItem(i);
 			});
 			if (i === this.selectedSuggestionIndex) {
 				item.classList.add('selected');
