@@ -1,0 +1,49 @@
+$background: #2c3e50;
+$suggestion-text: #bdc3c7;
+$suggestion-highlight: #34495e;
+
+.webactions-command-palette {
+	position: fixed;
+	left: calc(50% - 250px);
+	top: 200px;
+	background-color: $background;
+	width: 500px;
+	z-index: 1000;
+	display: none;
+	box-sizing: border-box;
+	padding: 1em;
+	box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.5);
+
+	&.show {
+		display: block;
+	}
+
+	input {
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.webactions-command-suggestions > * {
+		padding: .5em;
+		color: $suggestion-text;
+
+		&.selected {
+			background-color: $suggestion-highlight;
+		}
+	}
+}
+
+.webactions-backdrop {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 999;
+	background-color: rgba(0, 0, 0, .75);
+	display: none;
+
+	&.show {
+		display: block;
+	}
+}
