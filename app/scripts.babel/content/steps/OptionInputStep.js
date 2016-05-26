@@ -1,3 +1,7 @@
+/**
+ * Opens up a command-style dialog and
+ * provides a list of options to choose from
+ */
 class OptionInputStep {
 	run(config, locals, callback) {
 		let d = new Dialog( () => {

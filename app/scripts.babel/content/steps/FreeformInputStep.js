@@ -1,3 +1,7 @@
+/**
+ * Opens a command-style dialog
+ * and accepts freeform text input
+ */
 class FreeformInputStep {
 	run(config, locals, callback) {
 		let d = new Dialog( (item) => {
