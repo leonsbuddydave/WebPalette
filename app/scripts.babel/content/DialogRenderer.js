@@ -1,7 +1,6 @@
 const ENTER = 13;
 const DOWN_ARROW = 40;
 const UP_ARROW = 38;
-const MINIMUM_VISIBLE_SUGGESTIONS = 2;
 
 /**
  * Renderer for the user input dialog.
@@ -40,8 +39,6 @@ class DialogRenderer {
 		this.textInput.addEventListener('keydown', (e) => {
 			return this.onKeyDown(e);
 		});
-		document.body.appendChild(this.backdrop);
-		document.body.appendChild(this.container);
 	}
 
 	/**
@@ -84,6 +81,8 @@ class DialogRenderer {
 	render() {
 		// Adjust visibility
 		if (this.dialog.visible) {
+			document.body.appendChild(this.backdrop);
+			document.body.appendChild(this.container);
 			this.container.classList.add('show');
 			this.backdrop.classList.add('show');
 			this.textInput.focus();
@@ -92,6 +91,8 @@ class DialogRenderer {
 			this.backdrop.classList.remove('show');
 			this.textInput.value = '';
 			this.selectedSuggestionIndex = 0;
+			this.backdrop.remove();
+			this.container.remove();
 		}
 
 		this.suggestionsContainer.innerHTML = '';
@@ -99,7 +100,7 @@ class DialogRenderer {
 		// Render suggestion list
 		const suggestionFragment = document.createDocumentFragment();
 		const suggestions = this.dialog.currentSuggestions;
-		if (suggestions.length >= MINIMUM_VISIBLE_SUGGESTIONS) {
+		if (!this.dialog.freeformTextEnabled) {
 			suggestions.forEach((suggestion, i) => {
 				var item = document.createElement('div');
 				item.innerHTML = '<div>' + (suggestion.label || suggestion) + '</div>';

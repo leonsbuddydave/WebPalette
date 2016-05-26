@@ -3,6 +3,20 @@
  */
 class Dialog extends Dispatcher {
 
+	static getCurrentDialog() {
+		return this.currentDialog;
+	}
+
+	static setCurrentDialog(dialog) {
+		this.currentDialog = dialog;
+	}
+
+	static clearCurrentDialog() {
+		if (this.currentDialog) {
+			this.currentDialog.toggle();
+		}
+	}
+
 	/**
 	 * Event ID for item selection
 	 */
@@ -19,9 +33,19 @@ class Dialog extends Dispatcher {
 		this.filterStrategy = filterStrategy;
 		this.currentSuggestions = [];
 		this.visible = false;
+		this.freeformTextEnabled = false;
 		this.filterText = '';
 		this.renderer = new DialogRenderer(this);
 		this.filter('');
+	}
+
+	/**
+	 * Enables free-form text (with no suggestions) for this dialog
+	 * @param  {boolean} enabled Whether this dialog is freeform
+	 */
+	enableFreeformText(enabled) {
+		this.freeformTextEnabled = enabled;
+		this.renderer.render();
 	}
 
 	/**
@@ -31,6 +55,13 @@ class Dialog extends Dispatcher {
 	 */
 	toggle(callback) {
 		this.visible = !this.visible;
+
+		if (!this.visible) {
+			Dialog.setCurrentDialog(null);
+		} else {
+			Dialog.setCurrentDialog(this);
+		}
+
 		this.renderer.render();
 		if (callback) {
 			callback();

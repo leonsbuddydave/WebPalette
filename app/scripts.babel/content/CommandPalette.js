@@ -8,14 +8,15 @@ class CommandPalette {
 		this.dialog.subscribe(Dialog.ITEM_SELECTED, (selection) => {
 			this.toggle(() => {
 				this.commandRunner.run(selection.data, commandMap.globals);
-			})
+			});
 		}, this);
 	}
 
 	getCommandSuggestions(filterText) {
 		return this.commandMap.commands.filter((com) => {
-			let matches = true;
-			matches &= com.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
+			let name = com.name.toLowerCase();
+			let text = filterText.toLowerCase();
+			let matches = name.includes(text);
 			matches &= this.conditionEvaluator.check(com.conditions);
 			return matches;
 		}).map((com) => {

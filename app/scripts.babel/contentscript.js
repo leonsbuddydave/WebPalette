@@ -18,6 +18,7 @@ cmf.getByHost(location.host, (map) => {
 window.addEventListener('keydown', (e) => {
 	if (e.shiftKey && e.ctrlKey && e.keyCode === 69) {
 		if (APP.palette) {
+			Dialog.clearCurrentDialog();
 			APP.palette.toggle();	
 		}
 	}
