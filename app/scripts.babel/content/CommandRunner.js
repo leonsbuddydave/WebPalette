@@ -1,44 +1,58 @@
 class CommandRunner {
 	constructor(storage) {
 		this.storage = storage;
+		this.stepFactory = new StepFactory();
 
 		let suspendedCommand = storage.get('suspendedCommand');
-		console.log(suspendedCommand);
+		console.log('Suspended command', suspendedCommand);
 
 		if (suspendedCommand) {
 			suspendedCommand = JSON.parse(suspendedCommand);
 			let command = suspendedCommand.command;
+			let locals = suspendedCommand.locals;
 			let nextStepIndex = parseInt(suspendedCommand.nextStepIndex, 10);
 			storage.clear('suspendedCommand');
-			this.run( command, nextStepIndex );
+			this.run( command, locals, nextStepIndex );
 		}
 	}
 
-	suspendCommand(command, nextStepIndex) {
+	suspendCommand(command, locals, nextStepIndex) {
 		this.storage.set('suspendedCommand', JSON.stringify({
 			command: command,
+			locals: locals,
 			nextStepIndex: nextStepIndex
 		}));
 	}
 
-	run(command, fromStep = 0) {
+	run(command, locals = {}, fromStep = 0) {
 		let remainingSteps = command.steps.slice(fromStep);
-		remainingSteps.some((step, index) => {
-			switch (step.type) {
-				case 'SIMULATE_CLICK':
-					var element = document.querySelector(step.data.selector);
-					element.click();
-					break;
-				case 'NAVIGATE':
-					window.location.href = step.data.destination;
-					break;
-				case 'WAIT_FOR_REFRESH':
-					this.suspendCommand(command, (index + 1) + '');
-					return true;
-					break;
-				default:
-					console.log('Unknown type');
+
+		if (remainingSteps.length === 0) {
+			return;
+		}
+
+		let nextStep = remainingSteps[0];
+
+		if (nextStep.type === 'WAIT_FOR_REFRESH') {
+			// Special step type for waiting for refresh
+			this.suspendCommand(command, locals, (fromStep + 1) + '');
+		} else {
+			// Create a clone data object with template parameters
+			// filled in from local object
+			let data = {};
+			for (let key of Object.keys(nextStep.data)) {
+				// Temporarily strings only
+				if (typeof nextStep.data[key] === 'string') {
+					data[key] = Mustache.render( nextStep.data[key], locals );	
+				} else {
+					data[key] = nextStep.data[key];
+				}
 			}
-		});
+
+			// Get and run a step based on type
+			this.stepFactory.getStep(nextStep.type).run(data, locals, () => {
+				this.run(command, locals, fromStep + 1);
+			});
+		}
 	}
 }

@@ -5,9 +5,9 @@ class CommandPalette {
 		this.conditionEvaluator = conditionEvaluator;
 
 		this.dialog = new Dialog(this.getCommandSuggestions.bind(this));
-		this.dialog.subscribe(Dialog.ITEM_SELECTED, (command) => {
+		this.dialog.subscribe(Dialog.ITEM_SELECTED, (selection) => {
 			this.toggle(() => {
-				this.commandRunner.run(command);
+				this.commandRunner.run(selection.data, commandMap.globals);
 			})
 		}, this);
 	}
@@ -18,6 +18,11 @@ class CommandPalette {
 			matches &= com.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
 			matches &= this.conditionEvaluator.check(com.conditions);
 			return matches;
+		}).map((com) => {
+			return {
+				label: com.name,
+				data: com
+			}
 		});
 	}
 

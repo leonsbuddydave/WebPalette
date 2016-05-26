@@ -1,8 +1,16 @@
 const ENTER = 13;
 const DOWN_ARROW = 40;
 const UP_ARROW = 38;
+const MINIMUM_VISIBLE_SUGGESTIONS = 2;
 
+/**
+ * Renderer for the user input dialog.
+ */
 class DialogRenderer {
+
+	/**
+	 * @param {Dialog} dialog The dialog to render to the user.
+	 */
 	constructor(dialog) {
 		this.dialog = dialog;
 		this.selectedSuggestionIndex = 0;
@@ -26,6 +34,9 @@ class DialogRenderer {
 		this.container.appendChild(this.suggestionsContainer);
 
 		// Set up some events and shit
+		this.textInput.addEventListener('input', (e) => {
+			return this.onInput(e);
+		});
 		this.textInput.addEventListener('keydown', (e) => {
 			return this.onKeyDown(e);
 		});
@@ -33,6 +44,11 @@ class DialogRenderer {
 		document.body.appendChild(this.container);
 	}
 
+	/**
+	 * Fired on a keydown in the input text field.
+	 * @param  {KeyboardEvent} e A keyboard event.
+	 * @return {boolean}   Whether or not to stop event bubbling.
+	 */
 	onKeyDown(e) {
 		if (e.keyCode === ENTER) {
 			this.dialog.selectItem(this.selectedSuggestionIndex);
@@ -49,12 +65,22 @@ class DialogRenderer {
 			e.preventDefault();
 			this.render();
 			return false;
-		} else {
-			this.selectedSuggestionIndex = 0;
-			this.dialog.filter(e.target.value);
 		}
 	}
 
+	/**
+	 * Fired when the input value in the text field changes.
+	 * @param  {Event} e The event details.
+	 * @return {boolean}   Whether or not to stop event bubbling.
+	 */
+	onInput(e) {
+			this.selectedSuggestionIndex = 0;
+			this.dialog.filter(e.target.value);
+	}
+
+	/**
+	 * Reflects the current state of the dialog to the DOM.
+	 */
 	render() {
 		// Adjust visibility
 		if (this.dialog.visible) {
@@ -68,23 +94,26 @@ class DialogRenderer {
 			this.selectedSuggestionIndex = 0;
 		}
 
+		this.suggestionsContainer.innerHTML = '';
+
 		// Render suggestion list
 		const suggestionFragment = document.createDocumentFragment();
 		const suggestions = this.dialog.currentSuggestions;
-		suggestions.forEach((suggestion, i) => {
-			var item = document.createElement('div');
-			item.innerHTML = '<div>' + suggestion.name + '</div>';
-			let index = i;
-			item.addEventListener('click', () => {
-				this.dialog.selectItem(i);
+		if (suggestions.length >= MINIMUM_VISIBLE_SUGGESTIONS) {
+			suggestions.forEach((suggestion, i) => {
+				var item = document.createElement('div');
+				item.innerHTML = '<div>' + (suggestion.label || suggestion) + '</div>';
+				let index = i;
+				item.addEventListener('click', () => {
+					this.dialog.selectItem(i);
+				});
+				if (i === this.selectedSuggestionIndex) {
+					item.classList.add('selected');
+				}
+				suggestionFragment.appendChild(item);
 			});
-			if (i === this.selectedSuggestionIndex) {
-				item.classList.add('selected');
-			}
-			suggestionFragment.appendChild(item);
-		});
+		}
 
-		this.suggestionsContainer.innerHTML = '';
 		this.suggestionsContainer.appendChild(suggestionFragment);
 	}
 }

@@ -33,6 +33,13 @@
         "https://*/*"
       ],
       "js": [
+        "bower_components/mustache.js/mustache.min.js",
+        "scripts/content/StepFactory.js",
+        "scripts/content/steps/SimulateClickStep.js",
+        "scripts/content/steps/FreeformInputStep.js",
+        "scripts/content/steps/NavigateStep.js",
+        "scripts/content/steps/OptionInputStep.js",
+        "scripts/content/Utils.js",
         "scripts/content/Dispatcher.js",
         "scripts/content/Dialog.js",
         "scripts/content/DialogRenderer.js",
