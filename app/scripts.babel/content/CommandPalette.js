@@ -7,13 +7,13 @@ class CommandPalette {
 		this.dialog = new Dialog(this.getCommandSuggestions.bind(this));
 		this.dialog.subscribe(Dialog.ITEM_SELECTED, (selection) => {
 			this.toggle(() => {
-				this.commandRunner.run(selection.data, commandMap.globals);
+				this.commandRunner.run(selection.data, selection.data.globals);
 			});
 		}, this);
 	}
 
 	getCommandSuggestions(filterText) {
-		return this.commandMap.commands.filter((com) => {
+		return this.commandMap.getCommands().filter((com) => {
 			let name = com.name.toLowerCase();
 			let text = filterText.toLowerCase();
 			let matches = name.includes(text);

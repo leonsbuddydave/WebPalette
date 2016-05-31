@@ -20,7 +20,8 @@
     "https://*/*",
     "debugger",
     "notifications",
-    "webNavigation"
+    "webNavigation",
+    "storage"
   ],
   "options_ui": {
     "page": "options.html",
@@ -45,6 +46,7 @@
         "scripts/content/DialogRenderer.js",
         "scripts/content/ConditionEvaluator.js",
         "scripts/content/Storage.js",
+        "scripts/content/CommandMap.js",
         "scripts/content/CommandMapFactory.js",
         "scripts/content/CommandRunner.js",
         "scripts/content/CommandPalette.js",

@@ -22,6 +22,7 @@ class DialogRenderer {
 		this.container = document.createElement('div');
 		this.container.classList.add('webactions-command-palette');
 
+		// Create a flavor text container
 		this.flavorTextContainer = document.createElement('div');
 		this.flavorTextContainer.classList.add('webactions-dialog-flavor-text');
 		this.container.appendChild(this.flavorTextContainer);
@@ -99,8 +100,15 @@ class DialogRenderer {
 			this.container.remove();
 		}
 
-		this.flavorTextContainer.innerText = this.dialog.getFlavorText() || '';
-
+		// Set the flavor text if it exists; hide the box if it doesn't
+		if (this.dialog.getFlavorText()) {
+			this.flavorTextContainer.innerText = this.dialog.getFlavorText();	
+			this.flavorTextContainer.classList.add('show');
+		} else {
+			this.flavorTextContainer.classList.remove('show');
+		}
+		
+		// Clear previous suggestions
 		this.suggestionsContainer.innerHTML = '';
 
 		// Render suggestion list

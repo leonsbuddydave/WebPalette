@@ -45,7 +45,7 @@ class CommandMapFactory {
 					.then((response) => {
 						if (response.ok) {
 							response.json().then((data) => {
-								callback(data);
+								callback(new CommandMap(data));
 							});					
 						} else {
 							callback(null);

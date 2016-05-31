@@ -8,7 +8,10 @@ Todo:
 * User configuration options
 * ~~Option to include question text with arbitrary user input~~
 * Command Map easy-generation tooling
-* TESTS
-* Inverted conditionals
+* Inverted command conditionals
 * Remote analytics and error reporting to help flag when a command is out of date
 * Full screen-reader support
+* Command history taken into account when searching
+* Variable templating against arrays in command data objects
+* Unit tests
+* Integration tests against supported websites
