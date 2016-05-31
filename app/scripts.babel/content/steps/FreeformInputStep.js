@@ -10,10 +10,9 @@ class FreeformInputStep {
 	run(config, locals, callback) {
 		let d = new Dialog( (item) => {
 			return [item];
-		});
+		}, config.question);
 		d.toggle();
 		d.enableFreeformText(true);
-
 		d.subscribe(Dialog.ITEM_SELECTED, (item) => {
 			locals[config.id] = item;
 			d.toggle(callback);

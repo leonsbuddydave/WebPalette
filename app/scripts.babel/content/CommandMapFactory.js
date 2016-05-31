@@ -1,4 +1,5 @@
-const REMOTE_BASENAME = 'https://raw.githubusercontent.com/leonsbuddydave/WebPaletteDefinitions/master';
+// const REMOTE_BASENAME = 'https://raw.githubusercontent.com/leonsbuddydave/WebPaletteDefinitions/master';
+const REMOTE_BASENAME = 'http://localhost:3000';
 
 class CommandMapFactory {
 

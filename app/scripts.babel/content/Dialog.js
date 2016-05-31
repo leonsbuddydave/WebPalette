@@ -28,9 +28,10 @@ class Dialog extends Dispatcher {
 	 * @param {Function} filterStrategy The function to call into with
 	 *                                 input to retrieve search results.
 	 */
-	constructor(filterStrategy) {
+	constructor(filterStrategy, flavorText) {
 		super();
 		this.filterStrategy = filterStrategy;
+		this.flavorText = flavorText;
 		this.currentSuggestions = [];
 		this.visible = false;
 		this.freeformTextEnabled = false;
@@ -46,6 +47,10 @@ class Dialog extends Dispatcher {
 	enableFreeformText(enabled) {
 		this.freeformTextEnabled = enabled;
 		this.renderer.render();
+	}
+
+	getFlavorText() {
+		return this.flavorText;
 	}
 
 	/**

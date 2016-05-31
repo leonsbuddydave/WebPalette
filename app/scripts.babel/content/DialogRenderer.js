@@ -22,6 +22,10 @@ class DialogRenderer {
 		this.container = document.createElement('div');
 		this.container.classList.add('webactions-command-palette');
 
+		this.flavorTextContainer = document.createElement('div');
+		this.flavorTextContainer.classList.add('webactions-dialog-flavor-text');
+		this.container.appendChild(this.flavorTextContainer);
+
 		// Create a text input
 		this.textInput = document.createElement('input');
 		this.textInput.type = 'text';
@@ -94,6 +98,8 @@ class DialogRenderer {
 			this.backdrop.remove();
 			this.container.remove();
 		}
+
+		this.flavorTextContainer.innerText = this.dialog.getFlavorText() || '';
 
 		this.suggestionsContainer.innerHTML = '';
 
