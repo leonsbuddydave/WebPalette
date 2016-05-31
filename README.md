@@ -1,4 +1,4 @@
-# WebActions
+# WebPalette
 
 Command palette for the open web.
 
