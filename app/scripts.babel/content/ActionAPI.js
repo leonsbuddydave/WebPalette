@@ -1,7 +1,13 @@
 import Dialog from './Dialog';
+import Session from './Session';
+import FuzzyFilterStrategy from './FuzzyFilterStrategy';
 
 export default class ActionAPI {
 	
+	constructor() {
+		this.session = new Session();
+	}
+
 	click(selector) {
 		let element = document.querySelector(selector);
 		element.click();
@@ -18,12 +24,11 @@ export default class ActionAPI {
 
 	waitForPageLoad() {
 		console.log('waitForPageLoad');
+		this.session.setValue('ACTION_IN_PROGRESS', this.session.getValue('CURRENT_ACTION'));
 	}
 
 	ask(question, options, callback) {
-		let d = new Dialog(() => {
-			return options;
-		});
+		let d = new Dialog(new FuzzyFilterStrategy(options), question);
 		d.toggle();
 		d.subscribe(Dialog.ITEM_SELECTED, (item) => {
 			d.toggle( () => {
@@ -38,5 +43,16 @@ export default class ActionAPI {
 
 	isDefined(value) {
 		return !this.isUndefined(value);
+	}
+
+	option(label, data) {
+		if (typeof data === 'undefined') {
+			return label;
+		} else {
+			return {
+				label: label,
+				data: data
+			}
+		}
 	}
 }

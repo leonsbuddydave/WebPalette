@@ -1,9 +1,17 @@
 import ActionAPI from './ActionAPI';
+import Session from './Session';
 
 export default class CommandMap {
 	constructor(config) {
 		this.config = window.eval(config);
 		this.commands = Object.keys(this.config);
+		this.session = new Session();
+
+		let actionInProgress = this.session.getValue('ACTION_IN_PROGRESS');
+		if (actionInProgress) {
+			this.session.removeValue('ACTION_IN_PROGRESS');
+			this.runCommand(actionInProgress);
+		}
 	}
 
 	/**
@@ -26,7 +34,9 @@ export default class CommandMap {
 	runCommand(commandName) {
 		var command = this.config[commandName];
 		if (command && command.action) {
-			command.action( new ActionAPI() );
+			this.session.setValue('CURRENT_ACTION', commandName);
+			command.action(new ActionAPI(), new Session());
+			this.session.removeValue('CURRENT_ACTION');
 		}
 	}
 }

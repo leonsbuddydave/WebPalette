@@ -63,6 +63,7 @@ export default class Dialog extends Dispatcher {
 	 */
 	toggle(callback) {
 		this.visible = !this.visible;
+		this.filter('');
 
 		if (!this.visible) {
 			Dialog.setCurrentDialog(null);
@@ -83,7 +84,7 @@ export default class Dialog extends Dispatcher {
 	 */
 	filter(text) {
 		this.filterText = text;
-		this.currentSuggestions = this.filterStrategy(text);
+		this.currentSuggestions = this.filterStrategy.invoke(text);
 		this.renderer.render();
 	}
 

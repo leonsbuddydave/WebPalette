@@ -14,6 +14,7 @@ import FreeformInputStep from './steps/FreeformInputStep';
 import NavigateStep from './steps/NavigateStep';
 import OptionInputStep from './steps/OptionInputStep';
 import SimulateClickStep from './steps/SimulateClickStep';
+import Session from './Session';
 
 const APP = {};
 

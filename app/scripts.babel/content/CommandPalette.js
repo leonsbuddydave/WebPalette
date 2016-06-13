@@ -1,15 +1,16 @@
 import Dialog from './Dialog';
+import FuzzyFilterStrategy from './FuzzyFilterStrategy';
 
 export default class CommandPalette {
-	constructor(commandMap, commandRunner) {
+	constructor(commandMap) {
 		this.commandMap = commandMap;
-		this.commandRunner = commandRunner;
 
-		this.dialog = new Dialog(this.getCommandSuggestions.bind(this));
+		this.dialog = new Dialog(new FuzzyFilterStrategy(() => {
+			return this.commandMap.getCommands();
+		}));
 		this.dialog.subscribe(Dialog.ITEM_SELECTED, (selection) => {
 			this.toggle(() => {
-				this.commandMap.runCommand(selection.data);
-				// this.commandRunner.run(selection.data, selection.data.globals);
+				this.commandMap.runCommand(selection);
 			});
 		}, this);
 	}
