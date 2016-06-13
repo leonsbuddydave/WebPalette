@@ -1,4 +1,6 @@
-class CommandPalette {
+import Dialog from './Dialog';
+
+export default class CommandPalette {
 	constructor(commandMap, commandRunner, conditionEvaluator) {
 		this.commandMap = commandMap;
 		this.commandRunner = commandRunner;

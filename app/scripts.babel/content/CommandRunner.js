@@ -1,4 +1,6 @@
-class CommandRunner {
+import StepFactory from './StepFactory';
+
+export default class CommandRunner {
 	constructor(storage) {
 		this.storage = storage;
 		this.stepFactory = new StepFactory();
@@ -16,6 +18,13 @@ class CommandRunner {
 		}
 	}
 
+	/**
+	 * Persists step data about this command to be picked up after the next page
+	 * load.
+	 * @param  {Command} command       The object containing command data.
+	 * @param  {Object} locals         Map of variables to be passed to the next step
+	 * @param  {Number} nextStepIndex  Index of the next step within this command
+	 */
 	suspendCommand(command, locals, nextStepIndex) {
 		this.storage.set('suspendedCommand', JSON.stringify({
 			command: command,
@@ -24,6 +33,13 @@ class CommandRunner {
 		}));
 	}
 
+	/**
+	 * Runs the given command under the set of provided locals,
+	 * starting at the provided step index.
+	 * @param  {Command} command  The command to run
+	 * @param  {Object} locals   	The local variables available to the command
+	 * @param  {Number} fromStep  The step index to start at in the command
+	 */
 	run(command, locals = {}, fromStep = 0) {
 		let remainingSteps = command.steps.slice(fromStep);
 

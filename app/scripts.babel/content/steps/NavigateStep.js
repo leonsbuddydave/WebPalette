@@ -4,7 +4,7 @@
  * Config:
  * 	{string} destination: The URL to navigate to
  */
-class NavigateStep {
+export default class NavigateStep {
 	run(config, locals, callback) {
 		window.location.href = config.destination;
 		callback();

@@ -1,7 +1,12 @@
+import SimulateClickStep from './steps/SimulateClickStep';
+import NavigateStep from './steps/NavigateStep';
+import FreeformInputStep from './steps/FreeformInputStep';
+import OptionInputStep from './steps/OptionInputStep';
+
 /**
  * Catalogs and returns Step instances based on type.
  */
-class StepFactory {
+export default class StepFactory {
 	constructor() {
 		this.steps = {};
 		this.steps['SIMULATE_CLICK'] = new SimulateClickStep();

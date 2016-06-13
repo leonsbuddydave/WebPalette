@@ -6,7 +6,7 @@
  * 	{string} question: Help text to include alongside the dialog
  * 	{string} id: The key to store the returned value against in locals
  */
-class FreeformInputStep {
+export default class FreeformInputStep {
 	run(config, locals, callback) {
 		let d = new Dialog( (item) => {
 			return [item];

@@ -1,4 +1,4 @@
-class CommandMapComposite {
+export default class CommandMapComposite {
 	
 	constructor(...commandMaps) {
 		this.commandMaps = commandMaps;

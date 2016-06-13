@@ -1,7 +1,10 @@
+import Dispatcher from './Dispatcher';
+import DialogRenderer from './DialogRenderer';
+
 /**
  * User-facing input dialog.
  */
-class Dialog extends Dispatcher {
+export default class Dialog extends Dispatcher {
 
 	static getCurrentDialog() {
 		return this.currentDialog;

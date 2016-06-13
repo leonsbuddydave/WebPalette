@@ -1,11 +1,10 @@
 (function () {
   'use strict';
 
-  describe('Give it some context', function () {
-    describe('maybe a bit more context here', function () {
-      it('should run here few assertions', function () {
-
-      });
-    });
+  describe('some test that is going to happen here', function() {
+  	it('should do something', function() {
+  		expect('something').toBe('something');
+  	});
   });
+
 })();

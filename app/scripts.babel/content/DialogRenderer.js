@@ -5,7 +5,7 @@ const UP_ARROW = 38;
 /**
  * Renderer for the user input dialog.
  */
-class DialogRenderer {
+export default class DialogRenderer {
 
 	/**
 	 * @param {Dialog} dialog The dialog to render to the user.

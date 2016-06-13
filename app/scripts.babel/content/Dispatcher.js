@@ -1,7 +1,7 @@
 /**
  * Event dispatching utility parent class
  */
-class Dispatcher {
+export default class Dispatcher {
 	
 	constructor() {
 		this.subscriptions = {};

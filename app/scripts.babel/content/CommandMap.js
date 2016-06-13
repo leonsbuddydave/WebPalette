@@ -1,4 +1,4 @@
-class CommandMap {
+export default class CommandMap {
 	constructor(dataSource) {
 		this.dataSource = dataSource;
 		this.commands = dataSource.commands.map((command) => {

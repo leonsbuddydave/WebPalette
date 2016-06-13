@@ -4,6 +4,15 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
 import {stream as wiredep} from 'wiredep';
+import karma from 'karma';
+import browserify from 'browserify';
+import babelify from 'babelify';
+import watchify from 'watchify';
+import fs from 'fs';
+import buffer from 'vinyl-buffer';
+import source from 'vinyl-source-stream';
+
+var Server = karma.Server;
 
 const $ = gulpLoadPlugins();
 
@@ -32,6 +41,9 @@ function lint(files, options) {
 gulp.task('lint', lint('app/scripts.babel/**/*.js', {
   env: {
     es6: true
+  },
+  parserOptions: {
+    sourceType: 'module'
   }
 }));
 
@@ -98,9 +110,9 @@ gulp.task('babel', () => {
       .pipe(gulp.dest('app/scripts'));
 });
 
-gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
+gulp.task('clean', del.bind(null, ['.tmp', 'dist', 'app/scripts/**/*']));
 
-gulp.task('watch', ['lint', 'babel', 'html'], () => {
+gulp.task('watch', ['lint', 'build-js', 'html'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -111,7 +123,7 @@ gulp.task('watch', ['lint', 'babel', 'html'], () => {
     'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
+  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'build-js']);
   gulp.watch('app/styles.scss/**/*.scss', ['styles']);
   gulp.watch('bower.json', ['wiredep']);
 });
@@ -137,11 +149,50 @@ gulp.task('package', function () {
 
 gulp.task('build', (cb) => {
   runSequence(
-    'lint', 'babel', 'chromeManifest',
+    'lint', 'build-js', 'chromeManifest',
     ['html', 'images', 'extras'],
     'size', cb);
 });
 
 gulp.task('default', ['clean'], cb => {
   runSequence('build', cb);
+});
+
+gulp.task('test', ['build'], (done) => {
+  new Server({
+    configFile: __dirname + '/karma.conf.js'
+  }, done).start();
+})
+
+function compile(indexPath, outputPath, watch) {
+  var bundler = browserify(indexPath, { debug: true }).transform(babelify, {
+    presets: ['es2015']
+  });
+
+  function rebundle() {
+    bundler
+      .bundle()
+      .on('error', function(err) {
+        console.error(err);
+        this.emit('end');
+      })
+      .pipe(fs.createWriteStream(outputPath));
+  };
+
+  if (watch) {
+    bundler.on('update', () => {
+      console.log("-> bundling...");
+      rebundle();
+    });
+  }
+
+  rebundle();
+}
+
+gulp.task('build-js', () => {
+  compile('app/scripts.babel/content/index.js', 'app/scripts/content.js');
+  compile('app/scripts.babel/background/index.js', 'app/scripts/background.js');
+  compile('app/scripts.babel/options/index.js', 'app/scripts/options.js');
+  compile('app/scripts.babel/popup/index.js', 'app/scripts/popup.js');
+  compile('app/scripts.babel/chromereload.js', 'app/scripts/chromereload.js');
 });

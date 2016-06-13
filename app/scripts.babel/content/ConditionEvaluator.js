@@ -1,4 +1,4 @@
-class ConditionEvaluator {
+export default class ConditionEvaluator {
 	check(conditions = []) {
 		return conditions.every((condition) => {
 

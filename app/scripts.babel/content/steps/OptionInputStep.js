@@ -7,7 +7,7 @@
  * 	{string} id: The key to store the returned value against in locals
  * 	{Array} options: The list of options provided to the user to choose from
  */
-class OptionInputStep {
+export default class OptionInputStep {
 	run(config, locals, callback) {
 		let d = new Dialog( () => {
 			return config.options;
