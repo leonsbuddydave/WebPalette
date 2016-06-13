@@ -1,14 +1,36 @@
+import Dialog from './Dialog';
+
 export default class ActionAPI {
 	
-	click() {}
+	click(selector) {
+		let element = document.querySelector(selector);
+		element.click();
+	}
 
-	navigate() {}
+	navigate(url) {
+		window.location.href = url;
+	}
 
-	elementExists() {}
+	elementExists(selector) {
+		let element = document.querySelector(selector);
+		return element !== null;
+	}
 
-	waitForPageLoad() {}
+	waitForPageLoad() {
+		console.log('waitForPageLoad');
+	}
 
-	ask() {}
+	ask(question, options, callback) {
+		let d = new Dialog(() => {
+			return options;
+		});
+		d.toggle();
+		d.subscribe(Dialog.ITEM_SELECTED, (item) => {
+			d.toggle( () => {
+				callback(item);
+			})
+		})
+	}
 
 	isUndefined(value) {
 		return (typeof value === 'undefined');

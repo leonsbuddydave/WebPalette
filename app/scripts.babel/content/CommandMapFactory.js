@@ -23,7 +23,7 @@ export default class CommandMapFactory {
 				} else {
 					callback(null);
 				}
-			})
+			});
 	}
 
 	getDefinitionUrlFromManifest(host, manifest) {
@@ -46,7 +46,7 @@ export default class CommandMapFactory {
 				fetch(this.getDefinitionUrlFromManifest(host, manifest))
 					.then((response) => {
 						if (response.ok) {
-							response.json().then((data) => {
+							response.text().then((data) => {
 								callback(new CommandMap(data));
 							});					
 						} else {

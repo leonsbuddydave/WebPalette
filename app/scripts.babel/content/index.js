@@ -3,7 +3,6 @@
 import CommandMapFactory from './CommandMapFactory';
 import CommandPalette from './CommandPalette';
 import CommandRunner from './CommandRunner';
-import ConditionEvaluator from './ConditionEvaluator';
 import Dispatcher from './Dispatcher';
 import Dialog from './Dialog';
 import Storage from './Storage';
@@ -23,8 +22,7 @@ cmf.getByHost(location.host, (map) => {
 	if (map !== null) {
 		APP.palette = new CommandPalette(
 			map,
-			new CommandRunner(new Storage()),
-			new ConditionEvaluator()
+			new CommandRunner(new Storage())
 		);
 	}
 });
