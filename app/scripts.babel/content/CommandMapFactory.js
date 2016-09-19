@@ -1,5 +1,5 @@
 // const REMOTE_BASENAME = 'https://raw.githubusercontent.com/leonsbuddydave/WebPaletteDefinitions/master';
-const REMOTE_BASENAME = 'http://localhost:3000';
+const REMOTE_BASENAME = 'http://localhost:6969';
 
 import CommandMap from './CommandMap';
 
@@ -36,6 +36,17 @@ export default class CommandMapFactory {
 		} else {
 			return `${baseUrl}/${mapping}?g=${Math.random()}`;	
 		}
+	}
+
+	getByUrl(url, callback) {
+		fetch(REMOTE_BASENAME + '?url=' + url)
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((data) => {
+						callback( new CommandMap(data) );
+					});
+				}
+			});
 	}
 
 	getByHost(host, callback) {

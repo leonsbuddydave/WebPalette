@@ -10,7 +10,9 @@ export default class CommandPalette {
 		}));
 		this.dialog.subscribe(Dialog.ITEM_SELECTED, (selection) => {
 			this.toggle(() => {
-				this.commandMap.runCommand(selection);
+				console.log(selection);
+				selection.run();
+				// this.commandMap.runCommand(selection);
 			});
 		}, this);
 	}

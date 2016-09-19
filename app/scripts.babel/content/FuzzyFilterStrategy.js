@@ -13,7 +13,7 @@ export default class FuzzyFilterStrategy {
 		}
 
 		return items.filter((item) => {
-			let itemText = (item.label || item).toLowerCase();
+			let itemText = (item.name || item).toLowerCase();
 			let matches = itemText.includes(text.toLowerCase());
 			return matches;
 		});

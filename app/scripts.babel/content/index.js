@@ -19,7 +19,9 @@ import Session from './Session';
 const APP = {};
 
 const cmf = new CommandMapFactory();
-cmf.getByHost(location.host, (map) => {
+console.info('Retrieving map for href: ' + location.href);
+cmf.getByUrl(location.href, (map) => {
+	console.log(map);
 	if (map !== null) {
 		APP.palette = new CommandPalette(
 			map,
@@ -33,6 +35,8 @@ window.addEventListener('keydown', (e) => {
 		if (APP.palette) {
 			Dialog.clearCurrentDialog();
 			APP.palette.toggle();	
+		} else {
+			
 		}
 	}
 });

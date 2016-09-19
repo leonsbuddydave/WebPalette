@@ -117,7 +117,7 @@ export default class DialogRenderer {
 		if (!this.dialog.freeformTextEnabled) {
 			suggestions.forEach((suggestion, i) => {
 				var item = document.createElement('div');
-				item.innerHTML = '<div>' + (suggestion.label || suggestion) + '</div>';
+				item.innerHTML = '<div>' + (suggestion.name || suggestion) + '</div>';
 				let index = i;
 				item.addEventListener('click', () => {
 					this.dialog.selectItem(i);

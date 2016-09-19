@@ -1,11 +1,25 @@
 import ActionAPI from './ActionAPI';
 import Session from './Session';
+import Utils from './Utils';
+import Command from './Command';
 
 export default class CommandMap {
 	constructor(config) {
-		this.config = window.eval(config);
-		this.commands = Object.keys(this.config);
+
 		this.session = new Session();
+		this.commandsById = {};
+		config.maps.forEach( (map) => {
+			var contents = window.eval(map.contents);
+
+			Object.keys(contents).forEach( (commandName) => {
+				var id = map.metadata.name + ' ' + commandName;
+				var definition = contents[commandName];
+				var command = new Command(commandName, definition, id, this.session);
+				this.addCommand(command);
+			});
+		});
+
+		this.commands = Object.values(this.commandsById);
 
 		let actionInProgress = this.session.getValue('ACTION_IN_PROGRESS');
 		if (actionInProgress) {
@@ -20,23 +34,20 @@ export default class CommandMap {
 	 */
 	getCommands() {
 		return this.commands.filter((command) => {
-			var showIf = this.config[command].showIf;
-			if (showIf) {
-				var show = showIf(new ActionAPI());
-				if (!show) {
-					return false;
-				}
-			}
-			return true;
+			return command.isAvailable();
 		});
 	}
 
-	runCommand(commandName) {
-		var command = this.config[commandName];
-		if (command && command.action) {
-			this.session.setValue('CURRENT_ACTION', commandName);
-			command.action(new ActionAPI(), new Session());
-			this.session.removeValue('CURRENT_ACTION');
-		}
+	getCommandById(id) {
+		return this.commandsById[id] || null;
+	}
+
+	addCommand(command) {
+		this.commandsById[command.getId()] = command;
+	}
+
+	runCommand(id) {
+		var command = this.commandsById[id];
+		command.run();
 	}
 }
